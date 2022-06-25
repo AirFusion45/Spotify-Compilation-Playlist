@@ -1,1 +1,2 @@
 # Spotify-Compilation-Playlist
+[![Nightly-minute-cron](https://github.com/AirFusion45/Spotify-Compilation-Playlist/actions/workflows/main.yml/badge.svg)](https://github.com/AirFusion45/Spotify-Compilation-Playlist/actions/workflows/main.yml)
