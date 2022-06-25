@@ -1,4 +1,4 @@
-const mode = 'dev'
+const mode = 'prod'
 if (mode === 'dev') {
     require('dotenv').config({ path: '.env' })
 }
