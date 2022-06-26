@@ -1,4 +1,4 @@
-const mode = 'prod'
+const mode = 'dev'
 if (mode === 'dev') {
     require('dotenv').config({ path: '.env' })
 }
@@ -185,27 +185,64 @@ app.get('/pull_songs', (req, res) => {
             tracks = [...new Set([...tracks, ...await exec(authinfo, playlists)])]
         }
         const collectionURI = dbClient.db('spotifycompDB').collection('uris')
-
+        
         await collectionURI.updateOne({ tracking: 'trackList' }, { $set: { arr: tracks } })
 
         database.close()
         res.sendStatus(200)
 
+        // prob should use recursion here but whatever this is a botch
         async function exec(authinfo, playlists) {
             return new Promise((resolve, reject) => {
                 var getTracks = {
                     method: 'get',
-                    url: `https://api.spotify.com/v1/playlists/${playlists[i]}?fields=tracks.items(track(uri))`,
+                    url: `https://api.spotify.com/v1/playlists/${playlists[i]}/tracks?fields=items(track(uri)),next`,
                     headers: {
                         'Authorization': `Bearer ${authinfo.access_token}`
                     }
                 }
                 axios(getTracks).then(async function (tracksRes) {
-                    var tempTracks = tracksRes.data.tracks.items.map(track => track.track.uri)
-                    resolve(tempTracks)
+                    var resolveTrack = []
+                    var tempTracks = tracksRes.data.items.map(track => track.track.uri)
+                    resolveTrack.push(...tempTracks)
+                    if (tracksRes.data.next) {
+                        var next = true
+                        var nextURL = tracksRes.data.next
+                    } else {
+                        resolve(resolveTrack)
+                    }
+                    while (next) {
+                        var nextResults = await getMoreTracks(authinfo, nextURL)
+                        tempTracks = nextResults.data.items.map(track => track.track.uri)
+                        resolveTrack = resolveTrack.concat(tempTracks)
+                        if (nextResults.data.next) {
+                            nextURL = nextResults.data.next
+                        } else {
+                            next = false
+                            resolve(resolveTrack)
+                        }
+                    }
                 })
             })
         }
+
+        async function getMoreTracks(authinfo, next) {
+            return new Promise((resolve, reject) => {
+                var getMoreTracks = {
+                    method: 'get',
+                    url: next,
+                    headers: {
+                        'Authorization': `Bearer ${authinfo.access_token}`
+                    }
+                }
+                axios(getMoreTracks).then(async function (tracksRes) {
+                    // var tempTracks = tracksRes.data.tracks.items.map(track => track.track.uri)
+                    resolve(tracksRes)
+                })
+            })
+        }
+
+
     })
 })
 
