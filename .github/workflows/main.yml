@@ -11,5 +11,5 @@ jobs:
           curl --location --request GET 'https://spotify-compilation-playlist.vercel.app/refresh_token'
           sleep 5
           curl --location --request GET 'https://spotify-compilation-playlist.vercel.app/pull_songs'
-          sleep 10
+          sleep 15
           curl --location --request GET 'https://spotify-compilation-playlist.vercel.app/update_playlist'
