@@ -15,7 +15,7 @@ const database = new MongoClient(process.env.MONGOURI, { useNewUrlParser: true, 
 var client_id = '220e69c3d40c4c1c8b2106c9502c0716'; // Your client id
 var client_secret = process.env.SPOTIFYSECRET; // Your secret
 if (mode === 'prod') {
-    var redirect_uri = 'https://spotify-compilation-playlist.vercel.app/'; // Your redirect uri
+    var redirect_uri = 'https://spotify-compilation-playlist.herokuapp.com/'; // Your redirect uri
 } else {
     var redirect_uri = 'http://localhost:8080/callback'; // Your redirect uri
 }
