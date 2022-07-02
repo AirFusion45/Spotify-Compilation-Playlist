@@ -185,7 +185,7 @@ app.get('/pull_songs', (req, res) => {
             tracks = [...new Set([...tracks, ...await exec(authinfo, playlists)])]
         }
         const collectionURI = dbClient.db('spotifycompDB').collection('uris')
-        
+
         await collectionURI.updateOne({ tracking: 'trackList' }, { $set: { arr: tracks } })
 
         database.close()
@@ -288,6 +288,10 @@ app.get('/update_playlist', (res, req) => {
     })
 })
 
-app.listen(8080, () => {
-    console.log(`Listening at http://localhost:${8080}`)
+var port = process.env.PORT
+if (port == null || port === '') {
+    port = 8080
+}
+app.listen(port, () => {
+    console.log(`Listening at http://localhost:${port}`)
 })
