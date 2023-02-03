@@ -1,7 +1,7 @@
 const mode = 'prod'
-if (mode === 'dev') {
-    require('dotenv').config({ path: '.env' })
-}
+// if (mode === 'dev') {
+require('dotenv').config({ path: '.env' })
+// }
 var express = require('express'); // Express web server framework
 var axios = require('axios');
 var cors = require('cors');
@@ -15,7 +15,7 @@ const database = new MongoClient(process.env.MONGOURI, { useNewUrlParser: true, 
 var client_id = '220e69c3d40c4c1c8b2106c9502c0716'; // Your client id
 var client_secret = process.env.SPOTIFYSECRET; // Your secret
 if (mode === 'prod') {
-    var redirect_uri = 'https://gleaming-fairy-d65590.netlify.app/'; // Your redirect uri
+    var redirect_uri = 'https://spotify-tools-376705.uw.r.appspot.com/'; // Your redirect uri
 } else {
     var redirect_uri = 'http://localhost:8080/callback'; // Your redirect uri
 }
